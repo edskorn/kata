@@ -2,7 +2,7 @@ import java.util.TreeMap;
 
 public class RomanNumber {
 
-    private final static TreeMap<Integer, String> map = new TreeMap<Integer, String>();
+    private final static TreeMap<Integer, String> map = new TreeMap<>();
 
     static {
 
@@ -22,12 +22,11 @@ public class RomanNumber {
 
     }
 
-    public final static String toRoman(int number) {
+    public static String toRoman(int number) {
         int l =  map.floorKey(number);
         if ( number == l ) {
             return map.get(number);
         }
         return map.get(l) + toRoman(number-l);
     }
-
 }
