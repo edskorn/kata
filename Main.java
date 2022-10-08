@@ -21,7 +21,7 @@ public class Main {
     public static String calc(String input) throws IOException
     {
         // заменить на константы
-        String errFormat = "Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *), разделенные одним пробелом";
+        String errFormat = "Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *), разделенные одинарными пробелами";
         String errRange = "Калькулятор принимает на вход числа от 1 до 10 включительно и от I до X";
         String errRomanNegative = "В римской системе нет отрицательных чисел и нуля";
         String errDifferentNumberSystem = "Используются одновременно разные системы счисления";
@@ -30,28 +30,19 @@ public class Main {
         int aArab;
         int bArab;
 
-        if (!input.contains(" ") || input.indexOf(" ")==0) throw new IOException(errFormat);
+        String[] split = input.split(" ");
+        if (split.length!=3) throw new IOException(errFormat);
 
-        String first = input.substring(0, input.indexOf(" "));
         try {
             // Парсим первый операнд - если римский, то продолжаем, если нет идём в catch проверить арабский ли.
-            aRome = RomeDigit.valueOf(first);
-
-            // Парсим оператор
-            if ((input.indexOf(" ", first.length()+1)==-1) || (input.indexOf(" ", first.length()+1)==first.length()+1)) {
-                throw new IOException(errFormat);
-            }
-            String operator = input.substring(first.length()+1, input.indexOf(" ", first.length()+1));
-            // Проверяем, не заканчивается ли выражение на операторе
-            if (input.length()-first.length()-operator.length()-2==0) throw new IOException(errFormat);
+            aRome = RomeDigit.valueOf(split[0]);
 
             //Парсим второй операнд
-            String second = input.substring(first.length()+operator.length()+2);
             try {
-                bRome = RomeDigit.valueOf(second);
+                bRome = RomeDigit.valueOf(split[2]);
             } catch (IllegalArgumentException e) {
                 try {
-                    Integer.parseInt(second);
+                    Integer.parseInt(split[2]);
                     throw new IOException(errDifferentNumberSystem);
                 }
                 catch (NumberFormatException ee) {
@@ -61,7 +52,7 @@ public class Main {
 
             //Проводим вычисление, если оператор допустимый
             int result;
-            switch (operator) {
+            switch (split[1]) {
                 case "+" -> result = aRome.getArabicNumber() + bRome.getArabicNumber();
                 case "-" -> {
                     if (aRome.getArabicNumber() <= bRome.getArabicNumber()) {
@@ -81,30 +72,21 @@ public class Main {
             }
 
             //Выводим результат римскими цифрами
-            return "Input: " + aRome + operator + bRome + " Result: " + RomanNumber.toRoman(result);
+            return "Input: " + aRome + split[1] + bRome + " Result: " + RomanNumber.toRoman(result);
 
         } catch (IllegalArgumentException e) {
             try {
-                aArab = Integer.parseInt(first);
+                aArab = Integer.parseInt(split[0]);
                 if (aArab<1 || aArab>10) throw new IOException(errRange);
 
-                // Парсим оператор
-                if ((input.indexOf(" ", first.length()+1)==-1) || (input.indexOf(" ", first.length()+1)==first.length()+1)) {
-                    throw new IOException(errFormat);
-                }
-                String operator = input.substring(first.length()+1, input.indexOf(" ", first.length()+1));
-                // Проверяем, не заканчивается ли выражение на операторе
-                if (input.length()-first.length()-operator.length()-2==0) throw new IOException(errFormat);
-
                 //Парсим второй операнд
-                String second = input.substring(first.length()+operator.length()+2);
                 try {
-                    bArab = Integer.parseInt(second);
+                    bArab = Integer.parseInt(split[2]);
                     if (bArab<1 || bArab>10) throw new IOException(errRange);
                 }
                 catch (NumberFormatException ee) {
                     try {
-                        RomeDigit.valueOf(second);
+                        RomeDigit.valueOf(split[2]);
                         throw new IOException(errDifferentNumberSystem);
                     } catch (IllegalArgumentException eee) {
                         throw new IOException(errRange);
@@ -112,7 +94,7 @@ public class Main {
                 }
 
                 int result;
-                switch (operator) {
+                switch (split[1]) {
                     case "+" -> result = aArab + bArab;
                     case "-" -> result = aArab - bArab;
                     case "*" -> result = aArab * bArab;
@@ -121,7 +103,7 @@ public class Main {
                 }
 
                 //Выводим результат арабскими цифрами
-                return "Input: " + aArab + operator + bArab + " Result: " + result;
+                return "Input: " + aArab + split[1] + bArab + " Result: " + result;
             }
             catch (NumberFormatException ee) {
                 throw new IOException(errFormat);
