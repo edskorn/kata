@@ -9,16 +9,16 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         // убрать бесконечный цикл при отправке на проверку
-        while (true) {
+        //while (true) {
             System.out.print("Введите выражение: ");
             String inputString = br.readLine();
-            if (inputString.equals("exit")) break;
+            //if (inputString.equals("exit")) break; //для остановки бесконечного цикла
             try {
                 System.out.println(calc(inputString));
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-        }
+        //}
     }
     public static String calc(String input) throws IOException
     {
@@ -53,7 +53,7 @@ public class Main {
             int result = calcAction(aRome.getArabicNumber(), bRome.getArabicNumber(), split[1], true);
 
             //Выводим результат римскими цифрами
-            return "Input: " + aRome + split[1] + bRome + " Result: " + RomanNumber.toRoman(result);
+            return "Результат: " + RomanNumber.toRoman(result);
 
         } catch (IllegalArgumentException e) {
             try {
@@ -80,7 +80,7 @@ public class Main {
                 int result = calcAction(aArab, bArab, split[1], false);
 
                 //Выводим результат арабскими цифрами
-                return "Input: " + aArab + split[1] + bArab + " Result: " + result;
+                return "Результат: " + result;
             }
             catch (NumberFormatException ee) {
                 throw new IOException(errFormat);

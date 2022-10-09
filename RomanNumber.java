@@ -4,6 +4,7 @@ public class RomanNumber {
 
     private final static TreeMap<Integer, String> map = new TreeMap<>();
 
+    //Прописываем ключи и значения
     static {
 
         map.put(1000, "M");
@@ -23,10 +24,13 @@ public class RomanNumber {
     }
 
     public static String toRoman(int number) {
+        // Ищем самый большой ключ, который меньше или равен ключу number
         int l =  map.floorKey(number);
         if ( number == l ) {
             return map.get(number);
         }
+        //Возвращаем найденное значение. Если найденный ключ l меньше number,
+        // то отправляемся в рекурсию с number-l
         return map.get(l) + toRoman(number-l);
     }
 }
